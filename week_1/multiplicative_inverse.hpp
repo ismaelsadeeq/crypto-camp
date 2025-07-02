@@ -1,6 +1,4 @@
 #include "fast_exp.hpp"
-#include "iostream"
-
 
 #ifndef MULTIPLICATIVE_INVERSE
 #define MULTIPLICATIVE_INVERSE

@@ -1,5 +1,4 @@
 #include <optional>
-#include <cassert>
 
 #ifndef FAST_EXPONENTIATION
 #define FAST_EXPONENTIATION

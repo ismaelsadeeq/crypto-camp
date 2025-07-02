@@ -1,8 +1,9 @@
-#include "iostream"
+#include "elgamal.hpp"
 #include "fast_exp.hpp"
 #include "multiplicative_inverse.hpp"
-#include "elgamal.hpp"
 
+#include "cassert"
+#include "iostream"
 
 void fast_exp_tests() {
     // ================================
