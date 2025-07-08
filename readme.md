@@ -7,7 +7,6 @@
 2. Multiplicative inverse in $\mathbb{Z}_p^*$
 3. ElGamal encryption and decryption
 
-##### TODO
-
-* Handle large primes
+##### Dependency
+* [NTL](https://libntl.org/): A Library for doing Number Theory 
 
