@@ -1,7 +1,8 @@
-#include "fast_exp.hpp"
-#include "multiplicative_inverse.hpp"
+#include "../common/big_int.hpp"
+#include "../common/fast_exp.hpp"
+#include "../common/multiplicative_inverse.hpp"
 
-#include <utility>
+#include "utility"
 
 #ifndef ELGAMAL_ENCRYPTION
 #define ELGAMAL_ENCRYPTION
@@ -20,11 +21,11 @@
  *
  * Returns a pair consisting of c1 and c2.
  */
-std::pair<NTL::ZZ, NTL::ZZ> basic_elgamal_encrypt(NTL::ZZ public_key, NTL::ZZ message, NTL::ZZ ephemeral_key, NTL::ZZ generator, NTL::ZZ prime_field)
+std::pair<big_int, big_int> basic_elgamal_encrypt(big_int public_key, big_int message, big_int ephemeral_key, big_int generator, big_int prime_field)
 {
-    NTL::ZZ c1 = fast_exponent(generator, ephemeral_key, prime_field);
-    NTL::ZZ public_key_ephemeral = fast_exponent(public_key, ephemeral_key, prime_field);
-    NTL::ZZ cipher_component = message * public_key_ephemeral;
+    big_int c1 = fast_exponent(generator, ephemeral_key, prime_field);
+    big_int public_key_ephemeral = fast_exponent(public_key, ephemeral_key, prime_field);
+    big_int cipher_component = message * public_key_ephemeral;
     return std::make_pair(c1, mod(cipher_component, prime_field));
 }
 
@@ -41,11 +42,11 @@ std::pair<NTL::ZZ, NTL::ZZ> basic_elgamal_encrypt(NTL::ZZ public_key, NTL::ZZ me
  * Returns:
  * - The decrypted message.
  */
-NTL::ZZ basic_elgamal_decrypt(NTL::ZZ c1, NTL::ZZ c2, NTL::ZZ private_key, NTL::ZZ prime_field)
+big_int basic_elgamal_decrypt(big_int c1, big_int c2, big_int private_key, big_int prime_field)
 {
-    NTL::ZZ shared_secret = fast_exponent(c1, private_key, prime_field);
-    NTL::ZZ shared_secret_inverse = get_multiplicative_inverse(shared_secret, prime_field);
-    NTL::ZZ message = shared_secret_inverse * c2;
+    big_int shared_secret = fast_exponent(c1, private_key, prime_field);
+    big_int shared_secret_inverse = get_multiplicative_inverse(shared_secret, prime_field);
+    big_int message = shared_secret_inverse * c2;
     return mod(message, prime_field);
 }
 

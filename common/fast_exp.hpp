@@ -1,10 +1,11 @@
-#include <NTL/ZZ.h>
-#include <optional>
+#include "big_int.hpp"
+
+#include "optional"
 
 #ifndef FAST_EXPONENTIATION
 #define FAST_EXPONENTIATION
 
-NTL::ZZ mod(NTL::ZZ a, NTL::ZZ n) {
+big_int mod(big_int a, big_int n) {
     return ( (a % n) + n ) % n;
 }
 
@@ -14,19 +15,19 @@ NTL::ZZ mod(NTL::ZZ a, NTL::ZZ n) {
  *  When modulo is provided, intermediate values stay small and avoid overflow.
  *  Without modulo, results can quickly exceed the storage limits of the int type.
 */
-NTL::ZZ fast_exponent(NTL::ZZ base, NTL::ZZ exponent, std::optional<NTL::ZZ> modulo = std::nullopt){
+big_int fast_exponent(big_int base, big_int exponent, std::optional<big_int> modulo = std::nullopt){
     // Edge case: Any number to the power of 0 is 1.
     // Even with modulo, we return 1 % modulo (to respect modulo when provided).
-    if (exponent == 0) return NTL::conv<NTL::ZZ>(1) % modulo.value_or(NTL::conv<NTL::ZZ>(2));
+    if (exponent == 0) return conv<big_int>(1) % modulo.value_or(conv<big_int>(2));
 
     // Edge case: 0 raised to any positive exponent is 0.
-    if (base == 0) return NTL::conv<NTL::ZZ>(0);
+    if (base == 0) return conv<big_int>(0);
 
     // Result accumulator: starts at 1 because it's the multiplicative identity.
-    NTL::ZZ result = NTL::conv<NTL::ZZ>(1);
+    big_int result = conv<big_int>(1);
 
     // Current base: we will repeatedly square this value.
-    NTL::ZZ current_base = base;
+    big_int current_base = base;
 
     // Loop while exponent is not zero.
     // Each iteration processes one bit of the exponent.

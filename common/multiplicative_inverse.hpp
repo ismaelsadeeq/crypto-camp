@@ -1,4 +1,4 @@
-#include <NTL/ZZ.h>
+#include "big_int.hpp"
 #include "fast_exp.hpp"
 
 #ifndef MULTIPLICATIVE_INVERSE
@@ -15,7 +15,7 @@
    and since the group ZP* has 1 as the identity,
    the multiplicative inverse is a^(p-2) mod p.
  */
-NTL::ZZ get_multiplicative_inverse(NTL::ZZ a, NTL::ZZ p)
+big_int get_multiplicative_inverse(big_int a, big_int p)
 {
   return fast_exponent(a, p - 2, p);
 }
