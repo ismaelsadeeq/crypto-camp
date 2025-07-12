@@ -2,6 +2,8 @@
 #include "../common/fast_exp.hpp"
 #include "../common/multiplicative_inverse.hpp"
 
+#include <iostream>
+
 #ifndef SECP256K1
 #define SECP256K1
 
@@ -9,14 +11,17 @@ static const big_int p = conv<big_int>("1157920892373161954235709850086879078532
 
 typedef std::pair<big_int, big_int> point;
 
-bool point_at_infinity(point& a)
-{
-    return a.first == 0 && a.second == 0;
-}
+static const point G = {conv<big_int>("55066263022277343669578718895168534326250603453777594175500187360389116729240"), conv<big_int>("32670510020758816978083085130507043184471273380659243275938904335757337482424")};
+point POINT_AT_INFINITY{conv<big_int>(0), conv<big_int>(0)};
 
 bool point_are_equal(point& a, point& b)
 {
     return a.first == b.first && a.second == b.second;
+}
+
+bool point_at_infinity(point& a)
+{
+    return point_are_equal(a, POINT_AT_INFINITY);
 }
 
 /*
@@ -25,7 +30,7 @@ bool point_are_equal(point& a, point& b)
     The curve equation follows y^2 = x^3 + 7
 */
 
-std::pair<big_int, big_int> affine_point_addition(point P, point Q) {
+point affine_point_addition(point P, point Q) {
     // Handle point at infinity (identity element in elliptic curve group)
     if (point_at_infinity(P)) return Q;
     if (point_at_infinity(Q)) return P;
@@ -59,6 +64,27 @@ std::pair<big_int, big_int> affine_point_addition(point P, point Q) {
     big_int y3 = mod(lambda * (P.first - x3) - P.second, p);
 
     return std::make_pair(x3, y3);
+}
+
+
+/*
+ * Multiply a point P by a scalar using the double and add method.
+ * Efficiently computes Q = scalar * P using point doubling and conditional addition.
+*/
+point affine_scalar_multiplication(big_int scalar, point P)
+{
+    big_int base = conv<big_int>(2);
+    big_int current_base = base;
+    point med_res = P;
+    point result = POINT_AT_INFINITY;
+    while (scalar > 0) {
+        if (bit(scalar, 0)) {
+            result = affine_point_addition(result, med_res);
+        }
+        scalar >>= 1;
+        med_res = affine_point_addition(med_res, med_res);
+    }
+    return result;
 }
 
 #endif
