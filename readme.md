@@ -11,11 +11,7 @@
 
 1. [Affine point addition for secp256k1](secp256k1/secp256k1.hpp)
 2. [Scalar multiplication for secp256k1](secp256k1/secp256k1.hpp)
-
-
-##### TODO
-
-2. Jacobian point addition for secp256k1
+3. [Jacobian point addition and doubling for secp256k1]((secp256k1/secp256k1.hpp))
 
 ##### Dependency
 
